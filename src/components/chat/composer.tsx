@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { SendHorizontal } from "lucide-react";
+import { SendHorizontal, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DatePicker } from "./date-picker";
 
 export function Composer({
   onSend,
@@ -14,6 +15,7 @@ export function Composer({
   placeholder?: string;
 }) {
   const [value, setValue] = useState("");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -30,6 +32,11 @@ export function Composer({
     setValue("");
   }
 
+  function insertDate(formatted: string) {
+    setValue((v) => (v.trim() ? `${v.trim()} ${formatted}` : formatted));
+    ref.current?.focus();
+  }
+
   return (
     <div className="border-t border-neutral-gray/15 bg-white/80 px-3 py-3 backdrop-blur-sm sm:px-4">
       <div
@@ -40,6 +47,17 @@ export function Composer({
             : "border-neutral-gray/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10",
         )}
       >
+        <button
+          type="button"
+          onClick={() => setPickerOpen(true)}
+          disabled={disabled}
+          aria-label="اختيار تاريخ"
+          title="اختيار تاريخ من التقويم"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-neutral-gray transition hover:bg-neutral-dark/5 hover:text-primary disabled:opacity-40"
+        >
+          <CalendarDays className="h-5 w-5" />
+        </button>
+
         <textarea
           ref={ref}
           rows={1}
@@ -65,8 +83,14 @@ export function Composer({
         </button>
       </div>
       <p className="mx-auto mt-1.5 max-w-3xl px-2 text-[11px] text-neutral-gray">
-        اضغط Enter للإرسال · Shift+Enter لسطر جديد
+        اضغط Enter للإرسال · Shift+Enter لسطر جديد · 📅 لاختيار تاريخ هجري أو ميلادي من التقويم
       </p>
+
+      <DatePicker
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onSelect={insertDate}
+      />
     </div>
   );
 }

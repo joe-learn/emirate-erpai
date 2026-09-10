@@ -250,7 +250,7 @@ export function ChatWorkspace() {
               محادثة جديدة
             </button>
             <h1 className="truncate text-sm font-semibold text-neutral-dark sm:text-base">
-              المساعد الذكي للموارد البشرية
+              المساعد الداخلي للإمارة بالمنطقة الشرقية
             </h1>
           </div>
           <UserMenu context="chat" />
@@ -263,10 +263,10 @@ export function ChatWorkspace() {
         >
           {/* ختم شعار الإمارة كخلفية خفيفة خلف المحادثة */}
           <img
-            src="/emirate-seal.png"
+            src="/emirate-seal-mark.png"
             alt=""
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-64 -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.06] sm:w-80"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-72 -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.16] sm:w-96"
           />
           {isEmpty ? (
             <div className="relative z-10 flex min-h-0 flex-1 flex-col">

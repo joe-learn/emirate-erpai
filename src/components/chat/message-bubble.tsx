@@ -29,16 +29,8 @@ export function TypingIndicator() {
 
 function AssistantAvatar() {
   return (
-    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-white">
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-        <path d="M12 2 3 7v2h18V7l-9-5Z" fill="currentColor" />
-        <path
-          d="M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
+    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white ring-1 ring-neutral-gray/15">
+      <img src="/emirate-seal-mark.png" alt="" className="h-6 w-6 object-contain" />
     </span>
   );
 }
