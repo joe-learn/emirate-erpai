@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-cairo: "Cairo", system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-surface text-neutral-dark;
+    font-feature-settings: "ss01";
+  }
+  ::selection {
+    @apply bg-primary/20;
+  }
+  /* شريط تمرير منسجم مع الهوية */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-neutral-gray/30;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-gray/50;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border bg-white shadow-card;
+    border-color: rgba(138, 136, 128, 0.16);
+  }
+  .input-base {
+    @apply w-full rounded-xl border border-neutral-gray/30 bg-white px-4 py-2.5 text-sm
+      text-neutral-dark placeholder:text-neutral-gray/70
+      outline-none transition
+      focus:border-primary focus:ring-4 focus:ring-primary/10;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm
+      font-semibold transition-all duration-200
+      focus-visible:outline-none focus-visible:ring-4 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-dark
+      focus-visible:ring-primary/25 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-neutral-dark hover:bg-neutral-dark/5;
+  }
+  .btn-outline {
+    @apply btn border border-neutral-gray/30 bg-white text-neutral-dark hover:border-primary hover:text-primary;
+  }
+  .skeleton {
+    @apply relative overflow-hidden rounded-lg;
+    background-color: rgba(138, 136, 128, 0.12);
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.55),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* RTL: عكس اتجاه أيقونات معيّنة عند الحاجة */
+[dir="rtl"] .flip-x {
+  transform: scaleX(-1);
+}
