@@ -89,6 +89,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setSession(null);
       setEmployee(null);
+      // مسح مفتاح الجلسة النشطة حتى لا يرث حساب موظف آخر يسجّل دخوله على
+      // نفس الجهاز/المتصفح رقم جلسة (وبالتالي سجل محادثات) خاص بشخص غيره
+      try {
+        localStorage.removeItem("erpai:active-session");
+      } catch {
+        // تجاهل لو التخزين المحلي غير متاح
+      }
       // إعادة تحميل كاملة لضمان مسح الجلسة من الكوكيز وإعادة تقييم الميدل وير
       window.location.href = "/login";
     }

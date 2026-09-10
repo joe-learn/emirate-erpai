@@ -59,6 +59,7 @@ export function ChatWorkspace() {
     const { data } = await supabase
       .from("conversation_logs")
       .select("session_id, message, role, service_code, created_at")
+      .eq("employee_id", employee.id)
       .order("created_at", { ascending: false })
       .limit(400);
 
@@ -95,6 +96,7 @@ export function ChatWorkspace() {
         .from("conversation_logs")
         .select("id, message, role, created_at")
         .eq("session_id", sid)
+        .eq("employee_id", employee?.id ?? "")
         .order("created_at", { ascending: true });
       setTyping(false);
       setMessages(
@@ -107,7 +109,7 @@ export function ChatWorkspace() {
         })),
       );
     },
-    [supabase],
+    [supabase, employee],
   );
 
   const startNewConversation = useCallback(() => {
