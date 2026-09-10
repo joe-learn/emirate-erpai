@@ -233,7 +233,7 @@ export function ChatWorkspace() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* شريط علوي */}
-        <header className="flex items-center justify-between border-b border-neutral-gray/15 bg-white/80 px-3 py-2.5 backdrop-blur-sm sm:px-4">
+        <header className="relative z-20 flex items-center justify-between border-b border-neutral-gray/15 bg-white/80 px-3 py-2.5 backdrop-blur-sm sm:px-4">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSidebarOpen(true)}
