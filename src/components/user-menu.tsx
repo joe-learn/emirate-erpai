@@ -63,6 +63,7 @@ export function UserMenu({ context }: { context: "chat" | "dashboard" }) {
             {context === "chat" && isAdmin && (
               <Link
                 href="/dashboard"
+                onClick={() => setOpen(false)}
                 className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-neutral-dark transition hover:bg-neutral-dark/5"
               >
                 <LayoutDashboard className="h-4 w-4 text-neutral-gray" />
@@ -72,6 +73,7 @@ export function UserMenu({ context }: { context: "chat" | "dashboard" }) {
             {context === "dashboard" && (
               <Link
                 href="/"
+                onClick={() => setOpen(false)}
                 className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-neutral-dark transition hover:bg-neutral-dark/5"
               >
                 <MessageSquare className="h-4 w-4 text-neutral-gray" />
@@ -79,7 +81,11 @@ export function UserMenu({ context }: { context: "chat" | "dashboard" }) {
               </Link>
             )}
             <button
-              onClick={signOut}
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                signOut();
+              }}
               className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-danger transition hover:bg-danger/10"
             >
               <LogOut className="h-4 w-4" />

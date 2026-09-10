@@ -8,7 +8,6 @@ import {
   useState,
   useCallback,
 } from "react";
-import { useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import type { Employee } from "@/lib/types";
@@ -33,7 +32,6 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = supabaseBrowser();
-  const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [loading, setLoading] = useState(true);
@@ -84,11 +82,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [session, loadEmployee]);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
-    setEmployee(null);
-    router.replace("/login");
-    router.refresh();
-  }, [supabase, router]);
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error("فشل تسجيل الخروج من Supabase:", err);
+    } finally {
+      setSession(null);
+      setEmployee(null);
+      // إعادة تحميل كاملة لضمان مسح الجلسة من الكوكيز وإعادة تقييم الميدل وير
+      window.location.href = "/login";
+    }
+  }, [supabase]);
 
   const value = useMemo<AuthState>(
     () => ({
