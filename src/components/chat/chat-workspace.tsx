@@ -259,12 +259,21 @@ export function ChatWorkspace() {
         {/* الرسائل */}
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+          className="relative flex min-h-0 flex-1 flex-col overflow-y-auto"
         >
+          {/* ختم شعار الإمارة كخلفية خفيفة خلف المحادثة */}
+          <img
+            src="/emirate-seal.png"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-64 -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.06] sm:w-80"
+          />
           {isEmpty ? (
-            <QuickStart employeeName={employee?.full_name} onPick={(p) => send(p)} />
+            <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+              <QuickStart employeeName={employee?.full_name} onPick={(p) => send(p)} />
+            </div>
           ) : (
-            <div className="mx-auto w-full max-w-3xl space-y-4 px-3 py-6 sm:px-4">
+            <div className="relative z-10 mx-auto w-full max-w-3xl space-y-4 px-3 py-6 sm:px-4">
               {messages.map((msg) => (
                 <MessageBubble key={msg.id} message={msg}>
                   {msg.status === "error" && (
