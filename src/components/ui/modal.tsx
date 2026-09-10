@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
@@ -17,6 +18,12 @@ export function Modal({
   children: React.ReactNode;
   size?: "md" | "lg";
 }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -28,7 +35,13 @@ export function Modal({
     };
   }, [open, onClose]);
 
-  return (
+  if (!mounted) return null;
+
+  // نستخدم Portal لعرض الـ Modal مباشرة داخل body، بعيدًا عن أي عنصر أب
+  // يستخدم backdrop-blur أو transform (مثل شريط الكتابة) - لأن هذه الخصائص
+  // تُنشئ "containing block" جديد لـ position:fixed فيخليها تنحصر جوه العنصر
+  // الأب بدل الشاشة كلها.
+  return createPortal(
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
@@ -62,6 +75,7 @@ export function Modal({
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
