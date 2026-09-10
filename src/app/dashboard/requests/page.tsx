@@ -16,6 +16,34 @@ import {
 import { fmtDateTime, relativeTime } from "@/lib/utils";
 import type { ServiceRequest, ServiceCode } from "@/lib/types";
 
+// n8n قد يخزن extracted_data/attachments كنص JSON بدل كائن/مصفوفة فعلية
+// (خطأ تاريخي في أداة الوكيل) - نطبّعها هنا مرة واحدة عشان أي مكان تاني
+// في الصفحة يتعامل معاها كبيانات حقيقية دايمًا ومايحصلش كراش عند العرض.
+function normalizeRequest(r: ServiceRequest): ServiceRequest {
+  let extracted_data: unknown = r.extracted_data;
+  if (typeof extracted_data === "string") {
+    try {
+      extracted_data = JSON.parse(extracted_data);
+    } catch {
+      extracted_data = {};
+    }
+  }
+  let attachments: unknown = r.attachments;
+  if (typeof attachments === "string") {
+    try {
+      attachments = JSON.parse(attachments);
+    } catch {
+      attachments = [];
+    }
+  }
+  if (!Array.isArray(attachments)) attachments = [];
+  return {
+    ...r,
+    extracted_data: (extracted_data ?? {}) as ServiceRequest["extracted_data"],
+    attachments: attachments as ServiceRequest["attachments"],
+  };
+}
+
 function RequestsInner() {
   const supabase = supabaseBrowser();
   const params = useSearchParams();
@@ -37,7 +65,7 @@ function RequestsInner() {
         .from("requests")
         .select("*, employees(full_name)")
         .order("created_at", { ascending: false });
-      setRows((data as ServiceRequest[]) ?? []);
+      setRows(((data as ServiceRequest[]) ?? []).map(normalizeRequest));
       setLoading(false);
     })();
   }, [supabase]);
