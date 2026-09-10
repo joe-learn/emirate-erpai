@@ -5,7 +5,7 @@ import type {
 } from "./types";
 
 export const SERVICE_LABELS: Record<ServiceCode, string> = {
-  LEAVE_REGULAR: "إجازة اعتيادية",
+  LEAVE_REGULAR: "إجازة عادية",
   LEAVE_SICK: "إجازة مرضية",
   LEAVE_PATERNITY: "إجازة أبوّة",
   LEAVE_EXAM: "إجازة امتحانات",

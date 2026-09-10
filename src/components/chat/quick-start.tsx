@@ -30,7 +30,7 @@ const ICONS: Record<ServiceCode, React.ComponentType<{ className?: string }>> = 
 };
 
 const PROMPTS: Record<ServiceCode, string> = {
-  LEAVE_REGULAR: "أريد تقديم طلب إجازة اعتيادية",
+  LEAVE_REGULAR: "أريد تقديم طلب إجازة",
   LEAVE_SICK: "أريد تقديم طلب إجازة مرضية",
   LEAVE_PATERNITY: "أريد تقديم طلب إجازة أبوّة",
   LEAVE_EXAM: "أريد تقديم طلب إجازة امتحانات",
@@ -44,7 +44,6 @@ const PROMPTS: Record<ServiceCode, string> = {
 
 const FEATURED: ServiceCode[] = [
   "LEAVE_REGULAR",
-  "LEAVE_SICK",
   "LEAVE_EXAM",
   "BANK_UPDATE",
   "COURSE_REQUEST",
@@ -102,7 +101,7 @@ export function QuickStart({
                 <Icon className="h-5 w-5" />
               </span>
               <span className="text-sm font-medium text-neutral-dark">
-                {SERVICE_LABELS[code]}
+                {code === "LEAVE_REGULAR" ? "الإجازة" : SERVICE_LABELS[code]}
               </span>
             </motion.button>
           );
