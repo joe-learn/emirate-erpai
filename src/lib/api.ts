@@ -84,6 +84,7 @@ export async function checkAttachment(params: {
   return {
     accepted: Boolean(raw?.accepted),
     reason: raw?.reason ?? null,
+    pending: Boolean(raw?.pending),
   };
 }
 
