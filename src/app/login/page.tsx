@@ -16,8 +16,8 @@ export default function LoginPage() {
         className="object-cover"
       />
       {/* overlay غامق بلون Primary Dark لضمان قراءة الفورم */}
-      <div className="absolute inset-0 bg-primary-dark/80" />
-      <div className="absolute inset-0 bg-gradient-to-l from-primary-dark/95 via-primary-dark/60 to-primary-dark/30" />
+      <div className="absolute inset-0 bg-primary-dark/35" />
+      <div className="absolute inset-0 bg-gradient-to-l from-primary-dark/60 via-primary-dark/30 to-primary-dark/10" />
 
       <div className="relative z-10 mx-auto flex min-h-dvh max-w-6xl flex-col justify-between px-6 py-8 lg:flex-row lg:items-center">
         {/* عمود ترحيبي (يظهر على الشاشات الكبيرة) */}
