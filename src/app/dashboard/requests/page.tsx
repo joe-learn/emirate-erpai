@@ -79,6 +79,16 @@ function RequestsInner() {
     }
   }, [params, rows]);
 
+  // تطبيق فلاتر الحالة/الخدمة القادمة من رابط (مثلاً من بطاقات لوحة "نظرة عامة")
+  // مرة واحدة عند فتح الصفحة، من غير ما تلغي اختيار المستخدم اليدوي بعد كده.
+  useEffect(() => {
+    const s = params.get("status");
+    const sv = params.get("service");
+    if (s) setStatus(s);
+    if (sv) setService(sv);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const routedOptions = useMemo(
     () =>
       Array.from(new Set(rows.map((r) => r.routed_to).filter(Boolean))) as string[],
@@ -89,7 +99,11 @@ function RequestsInner() {
     return rows.filter((r) => {
       if (!showTest && r.is_test) return false;
       if (service && r.service_code !== service) return false;
-      if (status && r.status !== status) return false;
+      if (status === "قيد المعالجة") {
+        if (!["جديد", "بانتظار استكمال"].includes(r.status)) return false;
+      } else if (status && r.status !== status) {
+        return false;
+      }
       if (priority && (r.priority ?? "عادي") !== priority) return false;
       if (routed && r.routed_to !== routed) return false;
       if (q) {

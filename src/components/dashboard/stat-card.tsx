@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export function StatCard({
@@ -11,6 +12,7 @@ export function StatCard({
   accent = "primary",
   index = 0,
   loading,
+  href,
 }: {
   label: string;
   value: string | number;
@@ -19,13 +21,14 @@ export function StatCard({
   accent?: "primary" | "accent" | "success" | "warning";
   index?: number;
   loading?: boolean;
+  href?: string;
 }) {
-  return (
+  const body = (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="card p-5"
+      className={cn("card p-5", href && "transition hover:-translate-y-0.5 hover:shadow-md")}
     >
       <div className="flex items-start justify-between">
         <div>
@@ -51,4 +54,13 @@ export function StatCard({
       </div>
     </motion.div>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block">
+        {body}
+      </Link>
+    );
+  }
+  return body;
 }

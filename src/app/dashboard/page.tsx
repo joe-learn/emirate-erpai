@@ -14,6 +14,7 @@ import { StatCard } from "@/components/dashboard/stat-card";
 import { Section } from "@/components/dashboard/section";
 import { BarChartCard, DonutChartCard } from "@/components/dashboard/charts";
 import { serviceLabel, REQUEST_STATUSES, STATUS_STYLES } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 import { fmtDuration, relativeTime } from "@/lib/utils";
 import type { ServiceRequest } from "@/lib/types";
 import Link from "next/link";
@@ -21,6 +22,7 @@ import { Badge } from "@/components/ui/primitives";
 
 export default function OverviewPage() {
   const supabase = supabaseBrowser();
+  const router = useRouter();
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,7 +59,7 @@ export default function OverviewPage() {
       rejected: byStatus("مرفوض"),
       avgRT,
       serviceData: Array.from(byService.entries())
-        .map(([code, value]) => ({ name: serviceLabel(code), value }))
+        .map(([code, value]) => ({ name: serviceLabel(code), value, code }))
         .sort((a, b) => b.value - a.value),
       statusData: REQUEST_STATUSES.map((s) => ({
         name: s,
@@ -78,6 +80,7 @@ export default function OverviewPage() {
           icon={Inbox}
           accent="primary"
           loading={loading}
+          href="/dashboard/requests"
         />
         <StatCard
           index={1}
@@ -87,6 +90,7 @@ export default function OverviewPage() {
           icon={Clock}
           accent="warning"
           loading={loading}
+          href="/dashboard/requests?status=قيد المعالجة"
         />
         <StatCard
           index={2}
@@ -95,6 +99,7 @@ export default function OverviewPage() {
           icon={CheckCircle2}
           accent="success"
           loading={loading}
+          href="/dashboard/requests?status=مكتمل"
         />
         <StatCard
           index={3}
@@ -103,6 +108,7 @@ export default function OverviewPage() {
           icon={TrendingUp}
           accent="accent"
           loading={loading}
+          href="/dashboard/requests"
         />
       </div>
 
@@ -115,7 +121,10 @@ export default function OverviewPage() {
           {loading ? (
             <div className="skeleton h-64 w-full" />
           ) : stats.serviceData.length ? (
-            <BarChartCard data={stats.serviceData} />
+            <BarChartCard
+              data={stats.serviceData}
+              onBarClick={(item) => router.push(`/dashboard/requests?service=${item.code}`)}
+            />
           ) : (
             <p className="py-16 text-center text-sm text-neutral-gray">
               لا توجد بيانات بعد.
@@ -127,7 +136,10 @@ export default function OverviewPage() {
           {loading ? (
             <div className="skeleton h-56 w-full" />
           ) : stats.statusData.length ? (
-            <DonutChartCard data={stats.statusData} />
+            <DonutChartCard
+              data={stats.statusData}
+              onSliceClick={(item) => router.push(`/dashboard/requests?status=${encodeURIComponent(item.name)}`)}
+            />
           ) : (
             <p className="py-16 text-center text-sm text-neutral-gray">
               لا توجد بيانات بعد.

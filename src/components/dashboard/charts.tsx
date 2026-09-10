@@ -25,10 +25,12 @@ const tooltipStyle = {
   },
 };
 
-export function BarChartCard({
+export function BarChartCard<T extends { name: string; value: number }>({
   data,
+  onBarClick,
 }: {
-  data: { name: string; value: number }[];
+  data: T[];
+  onBarClick?: (item: T) => void;
 }) {
   return (
     <ResponsiveContainer width="100%" height={280}>
@@ -51,7 +53,13 @@ export function BarChartCard({
           allowDecimals={false}
         />
         <Tooltip {...tooltipStyle} cursor={{ fill: "rgba(31,92,51,0.06)" }} />
-        <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={48}>
+        <Bar
+          dataKey="value"
+          radius={[6, 6, 0, 0]}
+          maxBarSize={48}
+          onClick={onBarClick ? (_, i) => onBarClick(data[i]) : undefined}
+          style={onBarClick ? { cursor: "pointer" } : undefined}
+        >
           {data.map((_, i) => (
             <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
           ))}
@@ -63,8 +71,10 @@ export function BarChartCard({
 
 export function DonutChartCard({
   data,
+  onSliceClick,
 }: {
   data: { name: string; value: number }[];
+  onSliceClick?: (item: { name: string; value: number }) => void;
 }) {
   const total = data.reduce((s, d) => s + d.value, 0);
   return (
@@ -79,6 +89,8 @@ export function DonutChartCard({
             outerRadius={90}
             paddingAngle={2}
             stroke="none"
+            onClick={onSliceClick ? (_, i) => onSliceClick(data[i]) : undefined}
+            style={onSliceClick ? { cursor: "pointer" } : undefined}
           >
             {data.map((_, i) => (
               <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -89,7 +101,11 @@ export function DonutChartCard({
       </ResponsiveContainer>
       <ul className="w-full space-y-2">
         {data.map((d, i) => (
-          <li key={d.name} className="flex items-center gap-2 text-sm">
+          <li
+            key={d.name}
+            onClick={onSliceClick ? () => onSliceClick(d) : undefined}
+            className={`flex items-center gap-2 text-sm${onSliceClick ? " cursor-pointer rounded-md px-1 py-0.5 transition hover:bg-neutral-dark/[0.04]" : ""}`}
+          >
             <span
               className="h-3 w-3 rounded-sm"
               style={{ background: PALETTE[i % PALETTE.length] }}
